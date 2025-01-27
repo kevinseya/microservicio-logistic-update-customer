@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/customers")
 @Tag(name = "Customers", description = "Endpoints for managing customers")
@@ -31,19 +33,19 @@ public class CustomerController {
             @ApiResponse(responseCode = "404", description = "Customer not found"),
             @ApiResponse(responseCode = "500", description = "Server error")
     })
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer updatedCustomer) {
+    public ResponseEntity<Customer> updateCustomer(@PathVariable UUID id, @RequestBody Customer updatedCustomer) {
         try {
-            System.out.println("Actualizando cliente con ID: " + id);
+            System.out.println("Updating customer with ID: " + id);
             Customer customer = customerService.updateCustomer(id, updatedCustomer);
             return ResponseEntity.ok(customer);
         } catch (ResponseStatusException e) {
-            System.err.println("Error al actualizar el cliente: " + e.getMessage());
+            System.err.println("Error to update customer: " + e.getMessage());
             throw e;
         } catch (Exception e) {
-            System.err.println("Error inesperado: " + e.getMessage());
+            System.err.println("Error unexpected: " + e.getMessage());
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
-                    "Error inesperado al actualizar el usuario: " + e.getMessage(), e
+                    "Error unexpected to update customer: " + e.getMessage(), e
             );
         }
     }

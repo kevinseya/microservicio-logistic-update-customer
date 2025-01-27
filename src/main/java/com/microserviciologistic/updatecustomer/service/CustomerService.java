@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CustomerService {
@@ -20,7 +21,7 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public Customer updateCustomer(Long customerId, Customer updatedCustomer) {
+    public Customer updateCustomer(UUID customerId, Customer updatedCustomer) {
         try {
             Optional<Customer> existingCustomer = customerRepository.findById(customerId);
             if (existingCustomer.isPresent()) {
@@ -32,10 +33,10 @@ public class CustomerService {
                 customer.setAddress(updatedCustomer.getAddress());
                 return customerRepository.save(customer);
             } else {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cliente con id " + customerId + " no encontrado");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with ID " + customerId + " not found");
             }
         } catch (DataAccessException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error de conexión a la base de datos: " + e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error to connection with database: " + e.getMessage(), e);
         }
     }
 
